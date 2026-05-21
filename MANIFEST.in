@@ -2,4 +2,8 @@ include LICENSE
 include THIRD_PARTY_NOTICES.md
 include README.md
 include CITATION.cff
+recursive-include docs *.md
+recursive-include examples *.py
+recursive-include scripts *.py
 recursive-include results/quick *.csv *.json
+recursive-include results/param_matched *.csv *.json

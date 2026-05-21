@@ -139,6 +139,32 @@ Run settings: `--steps 60 --eval-batches 8 --batch-size 2 --spatial-size 16
 this tiny setup has more parameters (122,489 vs 4,744), so these results support
 the model-quality claim but are not a parameter-matched benchmark.
 
+### Parameter-Matched Check
+
+To check whether the gains are only from parameter count, we also compared the
+same ADMUNet against four MONAI UNet configurations with similar parameter
+counts:
+
+```bash
+adm-unet-param-matched --output-dir results/param_matched
+```
+
+The ADMUNet configuration has 122,489 trainable parameters. The MONAI
+configurations range from 121,759 to 123,009 trainable parameters. The table
+below reports the best MONAI result among those matched configurations for each
+task.
+
+| Task | Metric | Best matched MONAI UNet | ADMUNet | Better |
+| --- | ---: | ---: | ---: | --- |
+| Sphere segmentation | Dice, higher is better | 0.9313 | 0.9317 | tie / ADMUNet marginal |
+| Bias-field denoising | MSE, lower is better | 0.0134 | 0.0033 | ADMUNet |
+| Contrast translation | MSE, lower is better | 0.0084 | 0.0032 | ADMUNet |
+
+This parameter-matched quick check suggests that ADMUNet's advantage is not only
+from having more parameters. The segmentation task is effectively tied under the
+best matched MONAI configuration, while ADMUNet remains clearly stronger on the
+two regression-style tasks.
+
 ## Deployment
 
 For training or inference environments, install the package into the same
