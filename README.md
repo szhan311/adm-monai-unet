@@ -64,6 +64,37 @@ timesteps = torch.tensor([100.0])
 y = model(x, timesteps=timesteps)
 ```
 
+## Why ADMUNet
+
+MONAI provides a strong medical-imaging toolkit, and `monai.networks.nets.UNet`
+is a reliable default baseline. In practice, however, the standard MONAI UNet
+constructor exposes a relatively compact set of architecture knobs: channel
+widths, strides, number of residual units, convolution kernels, activation,
+normalization, and dropout. That simplicity is useful, but it can also limit how
+far the model can be pushed without writing a custom network.
+
+`ADMUNet` keeps the MONAI-style entry points while exposing a richer
+diffusion-style U-Net design:
+
+- ADM residual blocks with GroupNorm and SiLU activations.
+- Optional scale-shift normalization for stronger feature modulation.
+- Timestep embedding and MLP conditioning, even when used as `forward(x)` with a
+  fixed default timestep.
+- Configurable ADM channel multipliers through either MONAI-style `channels` or
+  explicit `model_channels` / `channel_mult`.
+- Optional attention at selected resolutions via `attention_resolutions` or
+  `attention_downsample_factors`.
+- Attention head controls through `num_heads`, `num_head_channels`, and
+  `num_heads_upsample`.
+- ADM up/down residual blocks through `resblock_updown`.
+- Diffusion and conditional-generation hooks through `timesteps`, `xT`,
+  `condition_mode`, `class_cond`, and `num_classes`.
+
+This makes the package useful when a project already uses MONAI data loading,
+transforms, losses, metrics, or inferers, but the default MONAI UNet is not
+expressive enough for 3D denoising, paired image translation, reconstruction, or
+diffusion-style medical-imaging tasks.
+
 ## Notes On Compatibility
 
 - `ADMUNet` supports `spatial_dims` 1, 2, and 3; this package is primarily meant
