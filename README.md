@@ -64,6 +64,46 @@ timesteps = torch.tensor([100.0])
 y = model(x, timesteps=timesteps)
 ```
 
+## Class-Conditional Usage
+
+`class_cond=True` enables ADM-style class conditioning. This is useful when each
+volume has a global class label, site label, scanner label, disease group,
+domain ID, or any other discrete condition that should modulate the network.
+
+`num_classes` is the number of conditioning labels. It is not the same as
+`out_channels`, which still controls the number of output channels.
+
+```python
+import torch
+from adm_monai_unet import ADMUNet
+
+model = ADMUNet(
+    spatial_dims=3,
+    in_channels=1,
+    out_channels=2,      # output channels, e.g. segmentation logits
+    channels=(16, 32),
+    strides=(2,),
+    num_res_units=1,
+    image_size=32,
+    class_cond=True,
+    num_classes=4,       # conditioning labels: 0, 1, 2, 3
+)
+
+x = torch.randn(2, 1, 32, 32, 32)
+condition = torch.tensor([0, 3], dtype=torch.long)
+logits = model(x, y=condition)
+```
+
+When `class_cond=True`, `forward` requires `y` with shape `(batch,)` and integer
+class IDs in `[0, num_classes - 1]`. A MONAI-style training step can pass the
+label from the batch dictionary:
+
+```python
+images = batch["image"]
+condition = batch["condition"].long()
+pred = model(images, y=condition)
+```
+
 ## Why ADMUNet
 
 MONAI provides a strong medical-imaging toolkit, and `monai.networks.nets.UNet`
