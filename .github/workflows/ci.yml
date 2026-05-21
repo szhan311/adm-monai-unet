@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Run tests
+        run: pytest -q
+
+      - name: Check example
+        run: python examples/monai_style_usage.py
+
+  experiment-smoke:
+    name: MONAI experiment smoke
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package with experiment dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev,experiments]"
+
+      - name: Run short comparison
+        run: |
+          MPLCONFIGDIR=/tmp adm-unet-experiments \
+            --output-dir results/local/ci-smoke \
+            --steps 1 \
+            --eval-batches 1 \
+            --batch-size 1 \
+            --spatial-size 16 \
+            --channels 8,16 \
+            --threads 2

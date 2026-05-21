@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use ADM MONAI U-Net, please cite this software."
+title: "ADM MONAI U-Net"
+version: "0.1.0"
+date-released: "2026-05-21"
+authors:
+  - family-names: "Zhang"
+    given-names: "Shuanghan"
+repository-code: "https://github.com/szhan311/adm-monai-unet"
+license: "MIT"
+keywords:
+  - "MONAI"
+  - "3D U-Net"
+  - "ADM"
+  - "medical imaging"

@@ -1,0 +1,62 @@
+[
+  {
+    "task": "sphere_segmentation",
+    "model": "monai_unet",
+    "metric_name": "dice",
+    "metric": 0.35204803198575974,
+    "higher_is_better": true,
+    "last_train_loss": 0.40395912528038025,
+    "train_seconds": 0.2971229860559106,
+    "parameters": 4744
+  },
+  {
+    "task": "sphere_segmentation",
+    "model": "adm_unet",
+    "metric_name": "dice",
+    "metric": 0.9316792115569115,
+    "higher_is_better": true,
+    "last_train_loss": 0.024455243721604347,
+    "train_seconds": 2.6508438382297754,
+    "parameters": 122489
+  },
+  {
+    "task": "bias_field_denoising",
+    "model": "monai_unet",
+    "metric_name": "mse",
+    "metric": 0.025526695419102907,
+    "higher_is_better": false,
+    "last_train_loss": 0.02568453550338745,
+    "train_seconds": 0.2383517292328179,
+    "parameters": 4744
+  },
+  {
+    "task": "bias_field_denoising",
+    "model": "adm_unet",
+    "metric_name": "mse",
+    "metric": 0.003336471156217158,
+    "higher_is_better": false,
+    "last_train_loss": 0.0025144792161881924,
+    "train_seconds": 2.5304005946964025,
+    "parameters": 122489
+  },
+  {
+    "task": "contrast_translation",
+    "model": "monai_unet",
+    "metric_name": "mse",
+    "metric": 0.026569283567368984,
+    "higher_is_better": false,
+    "last_train_loss": 0.027890430763363838,
+    "train_seconds": 0.23550650291144848,
+    "parameters": 4744
+  },
+  {
+    "task": "contrast_translation",
+    "model": "adm_unet",
+    "metric_name": "mse",
+    "metric": 0.003231729060644284,
+    "higher_is_better": false,
+    "last_train_loss": 0.0034303662832826376,
+    "train_seconds": 2.5480492119677365,
+    "parameters": 122489
+  }
+]
